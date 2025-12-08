@@ -17,6 +17,22 @@ public class Item {
         this.itemType = itemType;
     }
 
+    public LocalDate getLentDate() {
+        return lentDate;
+    }
+
+    public void setLentDate(LocalDate lentDate) {
+        this.lentDate = lentDate;
+    }
+
+    public LocalDate getLentTillDate() {
+        return lentTillDate;
+    }
+
+    public void setLentTillDate(LocalDate lentTillDate) {
+        this.lentTillDate = lentTillDate;
+    }
+
     public boolean resolved() {
         boolean resolved = true;
         try {

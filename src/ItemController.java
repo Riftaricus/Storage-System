@@ -13,8 +13,9 @@ public class ItemController {
         return item;
     }
 
-    public static Item createItem(String itemName, String itemType, int itemID) {
-        Item item = new Item(itemID, itemName, itemType);
+    public static Item createItem(String itemName, String itemType) {
+        index++;
+        Item item = new Item(index, itemName, itemType);
         ItemController.addItemToArrayList(item);
         return item;
     }
