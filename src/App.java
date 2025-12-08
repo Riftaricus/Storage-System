@@ -45,8 +45,9 @@ public class App {
         ItemController.createItem("ROBO1", "Robot");
         ItemController.createItem("ROBO2", "Robot");
 
-        ItemController.getItem(7).setLentTo("Rift", 30);
+        ItemController.getItem(7).setLentTo("Rift", 1);
 
-        UI.showMenu();
+        while (true)
+            UI.showMenu();
     }
 }
