@@ -3,8 +3,19 @@ import java.util.ArrayList;
 public class ItemController {
     private static ArrayList<Item> items = new ArrayList<>();
 
+    private static int index = 0;
+
+    public static Item createItem(String itemName, String itemType, boolean autoAddToArray) {
+        index++;
+        Item item = new Item(index, itemName, itemType);
+        if (autoAddToArray)
+            ItemController.addItemToArrayList(item);
+        return item;
+    }
+
     public static Item createItem(String itemName, String itemType, int itemID) {
         Item item = new Item(itemID, itemName, itemType);
+        ItemController.addItemToArrayList(item);
         return item;
     }
 
@@ -38,10 +49,25 @@ public class ItemController {
         StringBuilder formattedString = new StringBuilder();
 
         for (Item i : items) {
-            formattedString.append(i.getItemName() + " " + i.getItemType() + " " + i.getItemID() + ", ");
+            formattedString.append(
+                    "\n" + "Name: " + i.getItemName() + ", Type: " + i.getItemType() + ", ID: " + i.getItemID() + "\n");
         }
 
         return formattedString.toString();
 
+    }
+
+    public static Item getItem(int itemID) {
+        Item selectedItem = null;
+        for (Item i : items) {
+            if (i.getItemID() == itemID)
+                selectedItem = i;
+        }
+
+        if (selectedItem == null) {
+            selectedItem = null;
+        }
+
+        return selectedItem;
     }
 }
