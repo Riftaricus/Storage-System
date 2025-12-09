@@ -8,5 +8,6 @@
 ## Planned features
 
 - Accounts system
+- Permissions system
 
 Made & Designed by Riftaricus
