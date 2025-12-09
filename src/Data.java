@@ -1,4 +1,6 @@
 import java.sql.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class Data {
     public static boolean databaseLoaded = false;
@@ -90,8 +92,27 @@ public class Data {
         if (!databaseLoaded)
             return false;
 
-        // Loading from database here
+        // TODO Loading from database here
 
+        return resolved;
+    }
+
+    public static boolean updateDatabase() {
+        boolean resolved = true;
+        ArrayList<Item> itemArrayList = ItemController.getItemList();
+
+        for (Item i : itemArrayList) {
+            String name = i.getName();
+            String type = i.getType();
+            int id = i.getId();
+
+            LocalDate startDate = i.getLendStartDate();
+            LocalDate endDate = i.getLendEndDate();
+
+            String borrowerName = i.getBorrowerName();
+
+            // TODO loading to database here
+        }
         return resolved;
     }
 
