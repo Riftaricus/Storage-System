@@ -1,3 +1,6 @@
+import Item.ItemController;
+import UI.UI;
+
 public class App {
     public static void main(String[] args) throws Exception {
         ItemController.createItem("PD01", "Play Dough");
@@ -66,7 +69,7 @@ public class App {
         ItemController.createItem("AN03", "Animal Figures");
         ItemController.createItem("AN04", "Animal Figures");
 
-        System.out.println(ItemController.getItem("AN01").toString());
+        // DataJSON.updateFile();
 
         // Data.loadDatabase();
         // Data.triggerEditStatement("Query");

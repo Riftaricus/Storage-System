@@ -1,8 +1,12 @@
+package Data;
+
+import Item.*;
+
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class Data {
+public class DataBase {
     public static boolean databaseLoaded = false;
 
     public static Connection databaseConnection;
