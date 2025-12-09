@@ -3,156 +3,120 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class UI {
-    private static Scanner scanner = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in);
+    private static final String DIVIDER = "-------------------------------------";
 
     public static void showMenu() {
-        printDivider();
-        System.out.println("Welcome to the Volare system");
-        int target = showOption("Please choose from the following options", "Items,Lending");
-        printDivider();
-        switch (target) {
-            case 1:
-                StringBuilder combinedString = new StringBuilder();
-                ArrayList<Item> itemArray = ItemController.getItemList();
-                for (Item item : itemArray) {
-                    combinedString.append(
-                            "Name: " + item.getName() + " ( ID:" + item.getId() + " ) " + "Type:"
-                                    + item.getType() + " |Lent to: " + item.getBorrowerName() + " From: "
-                                    + item.getLendStartDate() + " Till: " + item.getLendEndDate() + ",");
-                }
-
-                viewDevices(combinedString.toString());
-                break;
-            case 2:
-                StringBuilder combinedString2 = new StringBuilder();
-                ArrayList<Item> itemArray2 = ItemController.getItemList();
-                for (Item item : itemArray2) {
-                    combinedString2.append(
-                            "Name: " + item.getName() + " ( ID:" + item.getId() + " ) " + "Type:"
-                                    + item.getType() + " |Lent to: " + item.getBorrowerName() + " From: "
-                                    + item.getLendStartDate() + " Till: " + item.getLendEndDate() + ",");
-                }
-
-                manageDevicesLending(combinedString2.toString());
-
-                break;
-
+        while (true) {
+            printDivider();
+            System.out.println("Welcome to the Volare system");
+            int target = showOption("Please choose from the following options", "Items,Lending");
+            printDivider();
+            
+            switch (target) {
+                case 1 -> viewDevices(buildItemListString());
+                case 2 -> manageDevicesLending();
+            }
+            printDivider();
         }
-        printDivider();
-        scanner.nextLine();
-        showMenu();
     }
 
-    private static boolean viewDevices(String deviceListString) {
+    private static String buildItemListString() {
+        StringBuilder sb = new StringBuilder();
+        ArrayList<Item> items = ItemController.getItemList();
+        for (Item item : items) {
+            sb.append(String.format("%s (ID:%d) | Type: %s | Lent to: %s | From: %s Till: %s,",
+                    item.getName(), item.getId(), item.getType(), 
+                    item.getBorrowerName(), item.getLendStartDate(), item.getLendEndDate()));
+        }
+        return sb.toString();
+    }
+
+    private static void viewDevices(String deviceListString) {
         int selection = showOption("Please choose which device to view", deviceListString);
         Item item = ItemController.getItemList().get(selection - 1);
+        displayItemDetails(item);
+    }
 
+    private static void manageDevicesLending() {
+        String deviceListString = buildItemListString();
+        int target = showOption("Please choose which device to manage", deviceListString);
+        Item selectedDevice = ItemController.getItemList().get(target - 1);
+
+        int action = showOption("What would you like to do?", "Lend out,Resolve");
+
+        if (action == 1) {
+            String borrower = showStringInput("Please choose who to lend " + selectedDevice.getName() + " to");
+            int days = showIntegerInput("Please choose how many days to lend " + selectedDevice.getName() + " to " + borrower);
+            selectedDevice.lendTo(borrower, days);
+        } else {
+            selectedDevice.resetLending();
+            System.out.println("Successfully resolved");
+        }
+        
+        displayItemDetails(selectedDevice);
+    }
+
+    private static void displayItemDetails(Item item) {
         printDivider();
         System.out.println("Device name: " + item.getName());
         System.out.println("Device type: " + item.getType());
         System.out.println("Device ID: " + item.getId());
         printDivider();
         System.out.println("Lent out to: " + item.getBorrowerName());
-        printDivider();
         System.out.println("Lent out at: " + item.getLendStartDate());
         System.out.println("Lent out till: " + item.getLendEndDate());
         System.out.println("Current date: " + LocalDate.now());
-
-        return true;
-    }
-
-    private static boolean manageDevicesLending(String combinedString) {
-        boolean resolved = true;
-
-        int target = showOption("Please choose which device to manage", combinedString.toString());
-
-        Item selectedDevice = ItemController.getItemList().get(target - 1);
-
-        target = showOption("What would you like to do?", "Lend out,Resolve");
-
-        if (target == 1) {
-
-            String stringInput = showStringInput("Please choose who to lend " + selectedDevice.getName() + " to");
-
-            int intInput = showIntegerInput(
-                    "Please choose how long to lend " + selectedDevice.getName() + " to " + stringInput);
-
-            selectedDevice.lendTo(stringInput, intInput);
-        } else {
-            selectedDevice.resetLending();
-            System.out.println("Succesfully resolved");
-        }
-
-        printDivider();
-        System.out.println("Device name: " + selectedDevice.getName());
-        System.out.println("Device type: " + selectedDevice.getType());
-        System.out.println("Device ID: " + selectedDevice.getId());
-        printDivider();
-        System.out.println("Lent out to: " + selectedDevice.getBorrowerName());
-        printDivider();
-        System.out.println("Lent out at: " + selectedDevice.getLendStartDate());
-        System.out.println("Lent out till: " + selectedDevice.getLendEndDate());
-        System.out.println("Current date: " + LocalDate.now());
-        return resolved;
     }
 
     private static void printDivider() {
-        System.out.println("-------------------------------------");
+        System.out.println(DIVIDER);
     }
 
     private static String showStringInput(String header) {
         printDivider();
         System.out.println(header);
         printDivider();
-        System.out.println("Type here");
-        String input = scanner.nextLine();
-        return input;
+        return scanner.nextLine().trim();
     }
 
     private static int showIntegerInput(String header) {
-        scanner.nextLine();
         printDivider();
         System.out.println(header);
         printDivider();
-        System.out.println("Type here");
         int input = -1;
         while (input == -1) {
             try {
-                input = Integer.parseInt(scanner.nextLine());
-            } catch (Exception e) {
+                input = Integer.parseInt(scanner.nextLine().trim());
+                if (input < 1) throw new NumberFormatException();
+            } catch (NumberFormatException e) {
                 input = -1;
-                System.out.println("Invalid input!");
+                System.out.println("Invalid input! Please enter a positive number.");
             }
         }
-
         return input;
     }
 
     private static int showOption(String header, String options) {
-
         String[] optionsArray = options.split(",");
-        int index = 0;
         printDivider();
         System.out.println(header);
         printDivider();
-        for (String i : optionsArray) {
-            index++;
-            System.out.println(index + ". " + i);
+        for (int i = 0; i < optionsArray.length; i++) {
+            System.out.println((i + 1) + ". " + optionsArray[i]);
         }
         printDivider();
+        
         int input = -1;
         while (input == -1) {
             try {
-                input = Integer.parseInt(scanner.nextLine());
+                input = Integer.parseInt(scanner.nextLine().trim());
                 if (input > optionsArray.length || input < 1) {
                     input = -1;
-                    System.out.println("Invalid input!");
+                    System.out.println("Invalid input! Please choose a valid option.");
                 }
-            } catch (Exception e) {
-                input = -1;
-                System.out.println("Invalid input!");
-                scanner.nextLine();
-
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input! Please enter a number.");
             }
         }
         return input;

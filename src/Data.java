@@ -84,4 +84,15 @@ public class Data {
         }
     }
 
+    public static boolean updateItems() {
+        boolean resolved = true;
+
+        if (!databaseLoaded)
+            return false;
+
+        // Loading from database here
+
+        return resolved;
+    }
+
 }
