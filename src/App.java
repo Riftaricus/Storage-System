@@ -66,6 +66,8 @@ public class App {
         ItemController.createItem("AN03", "Animal Figures");
         ItemController.createItem("AN04", "Animal Figures");
 
+        System.out.println(ItemController.getItem("AN01").toString());
+
         // Data.loadDatabase();
         // Data.triggerEditStatement("Query");
         // Data.triggerSelectStatement("Query");

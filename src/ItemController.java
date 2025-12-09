@@ -47,4 +47,8 @@ public class ItemController {
     public static Item getItem(int id) {
         return itemList.stream().filter(i -> i.getId() == id).findFirst().orElse(null);
     }
+
+    public static Item getItem(String itemName) {
+        return itemList.stream().filter(i -> i.getName().equals(itemName)).findFirst().orElse(null);
+    }
 }
