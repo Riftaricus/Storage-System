@@ -92,7 +92,13 @@ public class Data {
         if (!databaseLoaded)
             return false;
 
-        // TODO Loading from database here
+        ArrayList<Item> items = new ArrayList<>(); 
+
+        // TODO get info arraylist of items from database
+
+        for (Item item : items){
+            ItemController.createItem(item.getName(), item.getType());
+        }
 
         return resolved;
     }

@@ -1,11 +1,9 @@
 public class App {
     public static void main(String[] args) throws Exception {
 
-        Data.loadDatabase();
+        ItemController.createItem("Banana", "Laptop");
 
-        
-
-        Data.closeDatabase();
+        ItemController.getItem(1).lendTo("Daan", 7);
 
         while (true)
             UI.showMenu();

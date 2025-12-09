@@ -25,7 +25,7 @@ public class UI {
         StringBuilder sb = new StringBuilder();
         ArrayList<Item> items = ItemController.getItemList();
         for (Item item : items) {
-            sb.append(String.format("%s (ID:%d) | Type: %s | Lent to: %s | From: %s Till: %s,",
+            sb.append(String.format("%s (ID:%d) | Type: %s | Lent to: %s",
                     item.getName(), item.getId(), item.getType(), 
                     item.getBorrowerName(), item.getLendStartDate(), item.getLendEndDate()));
         }
