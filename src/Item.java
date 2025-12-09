@@ -1,80 +1,75 @@
 import java.time.LocalDate;
 
 public class Item {
-    private int itemID;
-    private String itemName;
-    private String itemType;
+    private int id;
+    private String name;
+    private String type;
 
-    private String lentTo;
+    private String borrowerName;
+    private LocalDate lendStartDate;
+    private LocalDate lendEndDate;
 
-    private LocalDate lentDate;
-
-    private LocalDate lentTillDate;
-
-    public Item(int itemID, String itemName, String itemType) {
-        this.itemID = itemID;
-        this.itemName = itemName;
-        this.itemType = itemType;
+    public Item(int id, String name, String type) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
     }
 
-    public LocalDate getLentDate() {
-        return lentDate;
+    public LocalDate getLendStartDate() {
+        return lendStartDate;
     }
 
-    public void setLentDate(LocalDate lentDate) {
-        this.lentDate = lentDate;
+    public void setLendStartDate(LocalDate lendStartDate) {
+        this.lendStartDate = lendStartDate;
     }
 
-    public LocalDate getLentTillDate() {
-        return lentTillDate;
+    public LocalDate getLendEndDate() {
+        return lendEndDate;
     }
 
-    public void setLentTillDate(LocalDate lentTillDate) {
-        this.lentTillDate = lentTillDate;
+    public void setLendEndDate(LocalDate lendEndDate) {
+        this.lendEndDate = lendEndDate;
     }
 
-    public boolean resolved() {
-        boolean resolved = true;
-        try {
-            lentTo = null;
-            lentDate = null;
-            lentTillDate = null;
-        } catch (Exception e) {
-            resolved = false;
-        }
-        return resolved;
+    // renamed from resolved()
+    public boolean resetLending() {
+        borrowerName = null;
+        lendStartDate = null;
+        lendEndDate = null;
+        return true;
     }
 
-    public String getLentTo() {
-        return lentTo;
+    public String getBorrowerName() {
+        return borrowerName;
     }
 
-    public void setLentTo(String lentTo, int amountLent) {
-        this.lentTo = lentTo;
-        lentDate = LocalDate.now();
-        this.lentTillDate = lentDate.plusDays(amountLent);
+    // renamed parameters
+    public void lendTo(String borrower, int days) {
+        this.borrowerName = borrower;
+        this.lendStartDate = LocalDate.now();
+        this.lendEndDate = lendStartDate.plusDays(days);
     }
 
-    public int getItemID() {
-        return itemID;
+    public int getId() {
+        return id;
     }
 
-    public String getItemName() {
-        return itemName;
+    public String getName() {
+        return name;
     }
 
-    public String getItemType() {
-        return itemType;
+    public String getType() {
+        return type;
     }
 
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
     public String toString() {
-        return "Item [itemID=" + itemID + ", itemName=" + itemName + ", itemType=" + itemType + ", lentTo=" + lentTo
-                + ", lentDate=" + lentDate + ", lentTillDate=" + lentTillDate + "]";
+        return "Item [id=" + id + ", name=" + name + ", type=" + type +
+                ", borrower=" + borrowerName + ", lendStart=" + lendStartDate +
+                ", lendEnd=" + lendEndDate + "]";
     }
-
 }

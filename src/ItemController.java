@@ -1,74 +1,50 @@
 import java.util.ArrayList;
 
 public class ItemController {
-    private static ArrayList<Item> items = new ArrayList<>();
+    private static ArrayList<Item> itemList = new ArrayList<>();
+    private static int nextId = 0;
 
-    private static int index = 0;
-
-    public static Item createItem(String itemName, String itemType, boolean autoAddToArray) {
-        index++;
-        Item item = new Item(index, itemName, itemType);
-        if (autoAddToArray)
-            ItemController.addItemToArrayList(item);
+    public static Item createItem(String name, String type, boolean autoAdd) {
+        nextId++;
+        Item item = new Item(nextId, name, type);
+        if (autoAdd)
+            addItem(item);
         return item;
     }
 
-    public static Item createItem(String itemName, String itemType) {
-        index++;
-        Item item = new Item(index, itemName, itemType);
-        ItemController.addItemToArrayList(item);
+    public static Item createItem(String name, String type) {
+        nextId++;
+        Item item = new Item(nextId, name, type);
+        addItem(item);
         return item;
     }
 
     public static boolean deleteItem(Item item) {
-        boolean resolved = true;
-        try {
-            item.resolved();
-            item.setItemName(null);
-            item.setLentTo(null, 0);
-        } catch (Exception e) {
-            resolved = false;
-        }
-        return resolved;
+        item.resetLending();
+        item.setName(null);
+        return true;
     }
 
-    public static boolean addItemToArrayList(Item item) {
-        boolean resolved = true;
-        try {
-            items.add(item);
-        } catch (Exception e) {
-            resolved = false;
-        }
-        return resolved;
+    public static boolean addItem(Item item) {
+        itemList.add(item);
+        return true;
     }
 
-    public static ArrayList<Item> getItemsArrayList() {
-        return items;
+    public static ArrayList<Item> getItemList() {
+        return itemList;
     }
 
-    public static String getFormattedItemsArrayList() {
-        StringBuilder formattedString = new StringBuilder();
-
-        for (Item i : items) {
-            formattedString.append(
-                    "\n" + "Name: " + i.getItemName() + ", Type: " + i.getItemType() + ", ID: " + i.getItemID() + "\n");
+    public static String getFormattedItemList() {
+        StringBuilder sb = new StringBuilder();
+        for (Item i : itemList) {
+            sb.append("\nName: ").append(i.getName())
+                    .append(", Type: ").append(i.getType())
+                    .append(", ID: ").append(i.getId()).append("\n");
         }
-
-        return formattedString.toString();
-
+        return sb.toString();
     }
 
-    public static Item getItem(int itemID) {
-        Item selectedItem = null;
-        for (Item i : items) {
-            if (i.getItemID() == itemID)
-                selectedItem = i;
-        }
-
-        if (selectedItem == null) {
-            selectedItem = null;
-        }
-
-        return selectedItem;
+    public static Item getItem(int id) {
+        return itemList.stream().filter(i -> i.getId() == id).findFirst().orElse(null);
     }
 }

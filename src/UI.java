@@ -13,24 +13,24 @@ public class UI {
         switch (target) {
             case 1:
                 StringBuilder combinedString = new StringBuilder();
-                ArrayList<Item> itemArray = ItemController.getItemsArrayList();
+                ArrayList<Item> itemArray = ItemController.getItemList();
                 for (Item item : itemArray) {
                     combinedString.append(
-                            "Name: " + item.getItemName() + " ( ID:" + item.getItemID() + " ) " + "Type:"
-                                    + item.getItemType() + " |Lent to: " + item.getLentTo() + " From: "
-                                    + item.getLentDate() + " Till: " + item.getLentTillDate() + ",");
+                            "Name: " + item.getName() + " ( ID:" + item.getId() + " ) " + "Type:"
+                                    + item.getType() + " |Lent to: " + item.getBorrowerName() + " From: "
+                                    + item.getLendStartDate() + " Till: " + item.getLendEndDate() + ",");
                 }
 
                 viewDevices(combinedString.toString());
                 break;
             case 2:
                 StringBuilder combinedString2 = new StringBuilder();
-                ArrayList<Item> itemArray2 = ItemController.getItemsArrayList();
+                ArrayList<Item> itemArray2 = ItemController.getItemList();
                 for (Item item : itemArray2) {
                     combinedString2.append(
-                            "Name: " + item.getItemName() + " ( ID:" + item.getItemID() + " ) " + "Type:"
-                                    + item.getItemType() + " |Lent to: " + item.getLentTo() + " From: "
-                                    + item.getLentDate() + " Till: " + item.getLentTillDate() + ",");
+                            "Name: " + item.getName() + " ( ID:" + item.getId() + " ) " + "Type:"
+                                    + item.getType() + " |Lent to: " + item.getBorrowerName() + " From: "
+                                    + item.getLendStartDate() + " Till: " + item.getLendEndDate() + ",");
                 }
 
                 manageDevicesLending(combinedString2.toString());
@@ -43,25 +43,22 @@ public class UI {
         showMenu();
     }
 
-    private static boolean viewDevices(String combinedString) {
-        boolean resolved = true;
-
-        int target = showOption("Please choose which device to view", combinedString.toString());
-
-        Item selectedDevice = ItemController.getItemsArrayList().get(target - 1);
+    private static boolean viewDevices(String deviceListString) {
+        int selection = showOption("Please choose which device to view", deviceListString);
+        Item item = ItemController.getItemList().get(selection - 1);
 
         printDivider();
-        System.out.println("Device name: " + selectedDevice.getItemName());
-        System.out.println("Device type: " + selectedDevice.getItemType());
-        System.out.println("Device ID: " + selectedDevice.getItemID());
+        System.out.println("Device name: " + item.getName());
+        System.out.println("Device type: " + item.getType());
+        System.out.println("Device ID: " + item.getId());
         printDivider();
-        System.out.println("Lent out to: " + selectedDevice.getLentTo());
+        System.out.println("Lent out to: " + item.getBorrowerName());
         printDivider();
-        System.out.println("Lent out at: " + selectedDevice.getLentDate());
-        System.out.println("Lent out till: " + selectedDevice.getLentTillDate());
+        System.out.println("Lent out at: " + item.getLendStartDate());
+        System.out.println("Lent out till: " + item.getLendEndDate());
         System.out.println("Current date: " + LocalDate.now());
 
-        return resolved;
+        return true;
     }
 
     private static boolean manageDevicesLending(String combinedString) {
@@ -69,32 +66,32 @@ public class UI {
 
         int target = showOption("Please choose which device to manage", combinedString.toString());
 
-        Item selectedDevice = ItemController.getItemsArrayList().get(target - 1);
+        Item selectedDevice = ItemController.getItemList().get(target - 1);
 
         target = showOption("What would you like to do?", "Lend out,Resolve");
 
         if (target == 1) {
 
-            String stringInput = showStringInput("Please choose who to lend " + selectedDevice.getItemName() + " to");
+            String stringInput = showStringInput("Please choose who to lend " + selectedDevice.getName() + " to");
 
             int intInput = showIntegerInput(
-                    "Please choose how long to lend " + selectedDevice.getItemName() + " to " + stringInput);
+                    "Please choose how long to lend " + selectedDevice.getName() + " to " + stringInput);
 
-            selectedDevice.setLentTo(stringInput, intInput);
+            selectedDevice.lendTo(stringInput, intInput);
         } else {
-            selectedDevice.resolved();
+            selectedDevice.resetLending();
             System.out.println("Succesfully resolved");
         }
 
         printDivider();
-        System.out.println("Device name: " + selectedDevice.getItemName());
-        System.out.println("Device type: " + selectedDevice.getItemType());
-        System.out.println("Device ID: " + selectedDevice.getItemID());
+        System.out.println("Device name: " + selectedDevice.getName());
+        System.out.println("Device type: " + selectedDevice.getType());
+        System.out.println("Device ID: " + selectedDevice.getId());
         printDivider();
-        System.out.println("Lent out to: " + selectedDevice.getLentTo());
+        System.out.println("Lent out to: " + selectedDevice.getBorrowerName());
         printDivider();
-        System.out.println("Lent out at: " + selectedDevice.getLentDate());
-        System.out.println("Lent out till: " + selectedDevice.getLentTillDate());
+        System.out.println("Lent out at: " + selectedDevice.getLendStartDate());
+        System.out.println("Lent out till: " + selectedDevice.getLendEndDate());
         System.out.println("Current date: " + LocalDate.now());
         return resolved;
     }
@@ -121,8 +118,7 @@ public class UI {
         int input = -1;
         while (input == -1) {
             try {
-                input = scanner.nextInt();
-                scanner.nextLine();
+                input = Integer.parseInt(scanner.nextLine());
             } catch (Exception e) {
                 input = -1;
                 System.out.println("Invalid input!");
@@ -147,7 +143,7 @@ public class UI {
         int input = -1;
         while (input == -1) {
             try {
-                input = scanner.nextInt();
+                input = Integer.parseInt(scanner.nextLine());
                 if (input > optionsArray.length || input < 1) {
                     input = -1;
                     System.out.println("Invalid input!");
