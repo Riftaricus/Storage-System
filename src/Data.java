@@ -22,7 +22,6 @@ public class Data {
 
     public static boolean loadDatabase() {
         try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
             String url = "";
             String user = "";
             String password = "";
@@ -31,9 +30,6 @@ public class Data {
             databaseConnection = con;
 
             databaseLoaded = true;
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            databaseLoaded = false;
         } catch (SQLException e) {
             e.printStackTrace();
             databaseLoaded = false;
@@ -43,20 +39,49 @@ public class Data {
 
     }
 
-    public static boolean executeUpdate(String query) {
-        boolean executedStatementSuccesfully = true;
+    public static boolean triggerSelectStatement(String query) {
+        if (!databaseLoaded)
+            return false;
 
-        if (databaseLoaded) {
-            try (Statement statement = databaseConnection.createStatement()) {
-                ResultSet rs = statement.executeQuery(query);
-            } catch (SQLException e) {
-                e.printStackTrace();
-                executedStatementSuccesfully = false;
+        try (Statement stmt = databaseConnection.createStatement()) {
+            boolean hasResultSet = stmt.execute(query);
+            if (hasResultSet) {
+                try (ResultSet rs = stmt.getResultSet()) {
+                    ResultSetMetaData metaData = rs.getMetaData();
+                    int columnCount = metaData.getColumnCount();
+
+                    while (rs.next()) {
+                        for (int i = 1; i <= columnCount; i++) {
+                            System.out.println(rs.getString(i) + "\t");
+                        }
+                        System.out.println();
+                    }
+                }
             }
-        } else
-            executedStatementSuccesfully = false;
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
-        return executedStatementSuccesfully;
+    public static boolean triggerEditStatement(String query) {
+        if (!databaseLoaded)
+            return false;
+
+        try (Statement stmt = databaseConnection.createStatement()) {
+            boolean hasResultSet = stmt.execute(query);
+            if (hasResultSet) {
+                try (ResultSet rs = stmt.getResultSet()) {
+                    int affectedRows = stmt.executeUpdate(query);
+                    System.out.println(affectedRows);
+                }
+            }
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 }
