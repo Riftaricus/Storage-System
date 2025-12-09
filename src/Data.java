@@ -24,9 +24,9 @@ public class Data {
 
     public static boolean loadDatabase() {
         try {
-            String url = "";
-            String user = "";
-            String password = "";
+            String url = "jdbc:mysql://127.0.0.1:3306/?user=root";
+            String user = "root";
+            String password = "root";
             Connection con = DriverManager.getConnection(url, user, password);
 
             databaseConnection = con;
