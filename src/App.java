@@ -1,7 +1,7 @@
 public class App {
     public static void main(String[] args) throws Exception {
 
-        ItemController.createItem("Banana", "Laptop");
+        ItemController.createItem("ROC Heyendaalseweg", "School");
 
         ItemController.getItem(1).lendTo("Daan", 7);
 

@@ -2,6 +2,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+
 public class UI {
     private static final Scanner scanner = new Scanner(System.in);
     private static final String DIVIDER = "-------------------------------------";
